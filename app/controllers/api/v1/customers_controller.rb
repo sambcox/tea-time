@@ -5,7 +5,7 @@ class Api::V1::CustomersController < ApplicationController
     if customer.save
       render json: CustomerSerializer.new(customer), status: :created
     else
-      render json: ErrorSerializer.serialize(Error.new(customer.errors))
+      render json: ErrorSerializer.serialize(Error.new(customer.errors)), status: :unprocessable_entity
     end
   end
 
