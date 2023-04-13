@@ -51,12 +51,11 @@ RSpec.describe 'Subscription Requests' do
 
       expect(response).to be_successful
       parsed_response = JSON.parse(response.body, symbolize_names: true)
-      expect(parsed_response[:data][:attributes][:title]).to eq(subscription_params[:title])
-      expect(parsed_response[:data][:attributes][:price]).to eq(subscription_params[:price])
       expect(parsed_response[:data][:attributes][:status]).to eq('inactive')
-      expect(parsed_response[:data][:attributes][:frequency]).to eq(subscription_params[:frequency])
 
-      expect(created_subscription.status).to eq('active')
+      subscription.reload
+
+      expect(subscription.status).to eq('inactive')
     end
   end
 end
