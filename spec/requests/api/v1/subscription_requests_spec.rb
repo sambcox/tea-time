@@ -139,5 +139,22 @@ RSpec.describe 'Subscription Requests' do
 
       expect(subscription.status).to eq('inactive')
     end
+
+    describe 'sad paths/edge cases' do
+      it 'will update if status is not given' do
+        subscription_params = {
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+        patch api_v1_subscription_path(subscription), headers: headers, params: JSON.generate(subscription_params)
+
+        expect(response).to be_successful
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+        expect(parsed_response[:data][:attributes][:status]).to eq('active')
+
+        subscription.reload
+
+        expect(subscription.status).to eq('active')
+      end
+    end
   end
 end
