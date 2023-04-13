@@ -1,3 +1,0 @@
-class BadDataError < StandardError
-  
-end

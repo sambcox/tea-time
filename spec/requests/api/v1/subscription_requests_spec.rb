@@ -141,7 +141,7 @@ RSpec.describe 'Subscription Requests' do
     end
 
     describe 'sad paths/edge cases' do
-      it 'will update if status is not given' do
+      it 'will not update if status is not given' do
         subscription_params = {
         }
         headers = { 'CONTENT_TYPE' => 'application/json' }
@@ -154,6 +154,19 @@ RSpec.describe 'Subscription Requests' do
         subscription.reload
 
         expect(subscription.status).to eq('active')
+      end
+
+      it 'will return an error if status is not active or inactive' do
+        subscription_params = {
+          status: 'gobbledegook'
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+        patch api_v1_subscription_path(subscription), headers: headers, params: JSON.generate(subscription_params)
+
+        expect(response.status).to eq 422
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+        expect(parsed_response[:errors].first).to eq("Status gobbledegook is not a valid status")
       end
     end
   end
