@@ -198,7 +198,8 @@ Tea Time was produced to satisfy the requirements of the Turing School of Softwa
 
 ## Database & Schema
 
-upload schema image here
+![Screen Shot 2023-04-13 at 2 33 43 PM](https://user-images.githubusercontent.com/113153444/231876901-d0717ffe-692f-46f9-a7c2-93fcf093e1c7.png)
+
 
 ## Completed By
 
