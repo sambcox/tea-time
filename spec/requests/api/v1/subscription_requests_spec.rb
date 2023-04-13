@@ -34,4 +34,29 @@ RSpec.describe 'Subscription Requests' do
       expect(created_subscription.tea.id).to eq(subscription_params[:tea_id])
     end
   end
+
+  describe 'subscription patch requests' do
+    let!(:customers) { create_list(:customer, 3)}
+    let!(:teas) { create_list(:tea, 6)}
+    let!(:subscriptions) { create_list(:subscription, 10)}
+    let!(:customer) { Customer.last }
+    let!(:tea) { Tea.last }
+    let!(:subscription) { Subscription.last }
+    it 'can change a subscription to be inactive' do
+      subscription_params = {
+        status: 'inactive'
+      }
+      headers = { 'CONTENT_TYPE' => 'application/json' }
+      patch api_v1_subscription_path(subscription), headers: headers, params: JSON.generate(subscription_params)
+
+      expect(response).to be_successful
+      parsed_response = JSON.parse(response.body, symbolize_names: true)
+      expect(parsed_response[:data][:attributes][:title]).to eq(subscription_params[:title])
+      expect(parsed_response[:data][:attributes][:price]).to eq(subscription_params[:price])
+      expect(parsed_response[:data][:attributes][:status]).to eq('inactive')
+      expect(parsed_response[:data][:attributes][:frequency]).to eq(subscription_params[:frequency])
+
+      expect(created_subscription.status).to eq('active')
+    end
+  end
 end
