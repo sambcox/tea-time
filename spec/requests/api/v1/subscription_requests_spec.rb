@@ -33,6 +33,88 @@ RSpec.describe 'Subscription Requests' do
       expect(created_subscription.customer.id).to eq(subscription_params[:customer_id])
       expect(created_subscription.tea.id).to eq(subscription_params[:tea_id])
     end
+
+    describe 'sad path/edge case testing' do
+      it 'will return an error if title is not given' do
+        subscription_params = {
+          price: Faker::Number.decimal(l_digits: 2),
+          frequency: Faker::Number.between(from: 1, to: 52),
+          customer_id: customer.id,
+          tea_id: tea.id
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+        post api_v1_subscriptions_path, headers: headers, params: JSON.generate(subscription_params)
+
+        expect(response.status).to eq 422
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+        expect(parsed_response[:errors].first).to eq("Title can't be blank")
+      end
+
+      it 'will return an error if price is not given' do
+        subscription_params = {
+          title: Faker::Vehicle.manufacture,
+          frequency: Faker::Number.between(from: 1, to: 52),
+          customer_id: customer.id,
+          tea_id: tea.id
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+        post api_v1_subscriptions_path, headers: headers, params: JSON.generate(subscription_params)
+
+        expect(response.status).to eq 422
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+        expect(parsed_response[:errors].first).to eq("Price can't be blank")
+      end
+
+      it 'will return an error if frequency is not given' do
+        subscription_params = {
+          title: Faker::Vehicle.manufacture,
+          price: Faker::Number.decimal(l_digits: 2),
+          customer_id: customer.id,
+          tea_id: tea.id
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+        post api_v1_subscriptions_path, headers: headers, params: JSON.generate(subscription_params)
+
+        expect(response.status).to eq 422
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+        expect(parsed_response[:errors].first).to eq("Frequency can't be blank")
+      end
+
+      it 'will return an error if customer ID is not given' do
+        subscription_params = {
+          title: Faker::Vehicle.manufacture,
+          price: Faker::Number.decimal(l_digits: 2),
+          frequency: Faker::Number.between(from: 1, to: 52),
+          tea_id: tea.id
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+        post api_v1_subscriptions_path, headers: headers, params: JSON.generate(subscription_params)
+
+        expect(response.status).to eq 404
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+        expect(parsed_response[:errors].first).to eq("Couldn't find Customer without an ID")
+      end
+
+      it 'will return an error if tea ID is not given' do
+        subscription_params = {
+          title: Faker::Vehicle.manufacture,
+          price: Faker::Number.decimal(l_digits: 2),
+          frequency: Faker::Number.between(from: 1, to: 52),
+          customer_id: customer.id
+        }
+        headers = { 'CONTENT_TYPE' => 'application/json' }
+        post api_v1_subscriptions_path, headers: headers, params: JSON.generate(subscription_params)
+
+        expect(response.status).to eq 404
+        parsed_response = JSON.parse(response.body, symbolize_names: true)
+
+        expect(parsed_response[:errors].first).to eq("Couldn't find Tea without an ID")
+      end
+    end
   end
 
   describe 'subscription patch requests' do

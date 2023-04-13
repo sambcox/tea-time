@@ -6,9 +6,9 @@ class Api::V1::SubscriptionsController < ApplicationController
     subscription = tea.subscriptions.create(subscription_params)
 
     if subscription.save
-      render json: SubscriptionSerializer.new(subscription)
+      render json: SubscriptionSerializer.new(subscription), status: :created
     else
-      render json: ErrorSerializer.serialize(Error.new(subscription.errors))
+      render json: ErrorSerializer.serialize(Error.new(subscription.errors)), status: :unprocessable_entity
     end
   end
 
@@ -17,9 +17,9 @@ class Api::V1::SubscriptionsController < ApplicationController
     subscription.update(subscription_params)
 
     if subscription.save
-      render json: SubscriptionSerializer.new(subscription)
+      render json: SubscriptionSerializer.new(subscription), status: 200
     else
-      render json: ErrorSerializer.serialize(Error.new(subscription.errors))
+      render json: ErrorSerializer.serialize(Error.new(subscription.errors)), status: :unprocessable_entity
     end
   end
 
