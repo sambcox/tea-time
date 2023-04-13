@@ -6,7 +6,9 @@ class Api::V1::SubscriptionsController < ApplicationController
     subscription = tea.subscriptions.create(subscription_params)
 
     if subscription.save
-
+      render json: SubscriptionSerializer.new(subscription)
+    else
+      render json: ErrorSerializer.serialize(Error.new(subscription.errors))
     end
   end
 

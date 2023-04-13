@@ -10,7 +10,7 @@ RSpec.describe 'Subscription Requests' do
       subscription_params = {
         title: Faker::Vehicle.manufacture,
         price: Faker::Number.decimal(l_digits: 2),
-        status: ['active', 'inactive'].shuffle.sample,
+        status: 'active',
         frequency: Faker::Number.between(from: 1, to: 52),
         customer_id: customer.id,
         tea_id: tea.id
@@ -28,9 +28,9 @@ RSpec.describe 'Subscription Requests' do
       created_subscription = Subscription.last
 
       expect(created_subscription.title).to eq(subscription_params[:title])
-      expect(created_subscription.description).to eq(subscription_params[:description])
-      expect(created_subscription.temperature).to eq(subscription_params[:temperature])
-      expect(created_subscription.brew_time).to eq(subscription_params[:brew_time])
+      expect(created_subscription.price).to eq(subscription_params[:price])
+      expect(created_subscription.status).to eq(subscription_params[:status])
+      expect(created_subscription.frequency).to eq(subscription_params[:frequency])
       expect(created_subscription.customer.id).to eq(subscription_params[:customer_id])
       expect(created_subscription.tea.id).to eq(subscription_params[:tea_id])
     end
