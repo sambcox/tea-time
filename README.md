@@ -1,23 +1,5 @@
 # Tea Time (Back End)
 
-## Table of Contents
-
-- [Description](#description)
-- [Getting Started](#getting-started)
-  - [Installation](#installation)
-  - [RSpec Suite](#rspec-suite)
-  - [Calling APIs](#calling-apis)
-- [Available Endpoints](#available-endpoints)
-  - [Create a New Customer](#create-a-new-customer)
-  - [Create a New Tea](#create-a-new-tea)
-  - [Create a New Subscription](#create-a-new-subscription)
-  - [Update a Subscription's Status](#update-a-subscription-status)
-  - [Return All Subscriptions for Customer](#return-all-subscriptions-for-customer)
-- [Goals](#goals)
-  - [Demonstration Goals](#demonstration-goals)
-- [Database \& Schema](#database--schema)
-- [Created By](#created-by)
-
 ## Description
 
 Tea Time is an API application that tracks Teas, Customers, and Customer Subscriptions to Teas, allowing customers to recieve subscriptions to teas at different frequencies.
